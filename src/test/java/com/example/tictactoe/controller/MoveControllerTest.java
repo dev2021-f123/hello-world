@@ -24,6 +24,22 @@ class MoveControllerTest {
 
     @DirtiesContext
     @Test
+    public void gameIsDraw() {
+        Exception exception = assertThrows(NestedServletException.class, () -> {
+
+            // no winner after 9 moves, game is draw
+            int[] moves = {4, 0, 1, 7, 6, 2, 5, 3, 8};
+            performGet(moves);
+        });
+
+        String expectedMessage = "Game is draw";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @DirtiesContext
+    @Test
     public void gameIsOver() {
         Exception exception = assertThrows(NestedServletException.class, () -> {
 
