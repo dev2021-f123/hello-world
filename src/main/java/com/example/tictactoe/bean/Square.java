@@ -7,6 +7,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class Square {
 
-    int value;
+    int position;
     String content;
 }

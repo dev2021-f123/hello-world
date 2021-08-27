@@ -23,6 +23,23 @@ class MoveControllerTest {
 
     @DirtiesContext
     @Test
+    public void positionNotEmpty() {
+        Exception exception = assertThrows(NestedServletException.class, () -> {
+
+            // the position 0 is already played
+            int[] moves = {0, 1, 0};
+
+            performGet(moves);
+        });
+
+        String expectedMessage = "Position is not empty";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @DirtiesContext
+    @Test
     public void positionNotValid() {
         Exception exception = assertThrows(NestedServletException.class, () -> {
 
