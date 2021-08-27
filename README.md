@@ -36,3 +36,7 @@
     - when there is a winner: the status of the response is HttpStatus.ACCEPTED
     - when the move is good: the status of the response is HttpStatus.OK
     - when game is over and still received request: runtimeException("Game is over")
+
+## Restart game
+
+    send a rest request to http://localhost:8080/restart

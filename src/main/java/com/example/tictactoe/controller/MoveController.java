@@ -17,6 +17,13 @@ public class MoveController {
 
     private boolean gameOver = false;
 
+    @GetMapping("/restart")
+    public ResponseEntity<Game> restart() {
+        game = new Game();
+        gameOver = false;
+        return new ResponseEntity<>(game, HttpStatus.OK);
+    }
+
     @GetMapping("/move/{position}")
     public ResponseEntity<Game> move(@PathVariable("position") int position) {
 
@@ -48,6 +55,10 @@ public class MoveController {
             gameOver = true;
             log.info("Winner is {}", winner);
             return new ResponseEntity<>(game, HttpStatus.ACCEPTED);
+        } else if (game.getSquares().size() == 9) {
+            String message = "Game is draw";
+            log.info(message);
+            throw new RuntimeException(message);
         }
         return new ResponseEntity<>(game, HttpStatus.OK);
     }
