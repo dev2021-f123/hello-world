@@ -14,12 +14,43 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(MoveController.class)
 class MoveControllerTest {
 
     @Autowired
     MockMvc mockMvc;
+
+    @DirtiesContext
+    @Test
+    public void gameIsOver() {
+        Exception exception = assertThrows(NestedServletException.class, () -> {
+
+            // game is over at 7th move
+            // the 8th move throws runtime exception
+            int[] moves = {0, 1, 2, 3, 4, 5, 6, 7};
+
+            performGet(moves);
+        });
+
+        String expectedMessage = "Game is over";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @DirtiesContext
+    @Test
+    public void winningMoves() throws Exception {
+
+        // game is over at 7th move and the winner is X
+        int[] moves = {0, 1, 2, 3, 4, 5, 6};
+
+        ResultActions perform = performGet(moves);
+        perform.andExpect(status().isAccepted());
+        perform.andExpect(jsonPath("$.squares[6].content", is("X")));
+    }
 
     @DirtiesContext
     @Test
